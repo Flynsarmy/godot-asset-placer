@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Godot Asset Placer"
+config/name="Godot Asset Placer Flyn"
 run/main_scene="uid://3qun24bndqll"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"

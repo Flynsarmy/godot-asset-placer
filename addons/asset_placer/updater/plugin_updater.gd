@@ -16,58 +16,53 @@ var _latest_update: PluginUpdate
 
 const TMP_ZIP = "user://addon.zip"
 
-func _init(local_config_path: String, remote_config_path: String):
-	self._local_plugin_path = local_config_path
-	self._remote_plugin_path = remote_config_path
-	self._client = PluginUpdaterHttpClient.new()
+func _init(local_config_path: String, remote_config_path: String) -> void:
+	_local_plugin_path = local_config_path
+	_remote_plugin_path = remote_config_path
+	_client = PluginUpdaterHttpClient.new()
 	instance = self
-	
-	
-func check_for_updates():
+
+
+func check_for_updates() -> void:
 	_latest_update = await _get_latest_update()
 	if !_latest_update:
 		return
-		
-	var current_version = PluginConfiguration.new(_local_plugin_path).version
+
+	var current_version: Version = PluginConfiguration.new(_local_plugin_path).version
 	if current_version.compare_to(_latest_update.version) < 0:
 		updater_update_available.emit(_latest_update)
 	else:
 		updater_up_to_date.emit()
 
-func do_update():
-	
+func do_update() -> void:
 	if FileAccess.open("res://docs/addon_folders.png", FileAccess.READ):
 		push_error("Trying to update plugin from within a plugin")
 		return
-		
-	
+
 	show_update_loading.emit(true)
-	var url_path = _latest_update.download_url;
+	var url_path: String = _latest_update.download_url;
 	_client.client_get(url_path)
-	
+
 	var zip: PackedByteArray = await _client.client_response
-	var tmp_file = FileAccess.open(TMP_ZIP, FileAccess.WRITE)
+	var tmp_file: FileAccess = FileAccess.open(TMP_ZIP, FileAccess.WRITE)
 	tmp_file.store_buffer(zip)
 	var zip_reader: ZIPReader = ZIPReader.new()
 	zip_reader.open(TMP_ZIP)
 	var files: PackedStringArray = zip_reader.get_files()
-	
+
 	OS.move_to_trash(ProjectSettings.globalize_path("res://addons/asset_placer"))
 
-	
 	var base_path: String
 
 	for path in files:
 		if path.ends_with("/addons/"):
 			base_path = path
 			break
-	
-	
 
 	for path in files:
 		if not path.contains(base_path):
 			continue
-		
+
 		var new_file_path: String = path.replace(base_path, "")
 		if path.ends_with("/"):
 			DirAccess.make_dir_recursive_absolute("res://addons/%s" % new_file_path)
@@ -80,8 +75,8 @@ func do_update():
 	_do_post_update.call_deferred()
 	EditorInterface.set_plugin_enabled("asset_placer", false)
 	show_update_loading.emit(false)
-	
-func _do_post_update():
+
+func _do_post_update() -> void:
 	EditorInterface.get_resource_filesystem().scan()
 	EditorInterface.set_plugin_enabled("asset_placer", true)
 
@@ -90,9 +85,9 @@ func _get_latest_update() -> PluginUpdate:
 	var response: PackedByteArray = await  _client.client_response
 	if response.is_empty():
 		return null
-		
-	var dict = JSON.parse_string(response.get_string_from_utf8())
-	var tag_name = dict["tag_name"]
-	var change_log = dict["body"]
-	var download_url = dict["zipball_url"]
+
+	var dict: Dictionary = JSON.parse_string(response.get_string_from_utf8())
+	var tag_name: String = dict["tag_name"]
+	var change_log: String = dict["body"]
+	var download_url: String = dict["zipball_url"]
 	return PluginUpdate.new(tag_name, change_log, download_url)

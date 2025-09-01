@@ -22,7 +22,7 @@ var placement_mode: PlacementMode = PlacementMode.SurfacePlacement.new():
 	set(value):
 		placement_mode = value
 		placement_mode_changed.emit(value)
-		
+
 var preview_transform_axis: Vector3 = Vector3.UP
 
 
@@ -33,56 +33,56 @@ enum TransformMode {
 	Move
 }
 
-func _init():
+func _init() -> void:
 	options = AssetPlacerOptions.new()
-	self._selected_asset = null
-	self._instance = self
+	_selected_asset = null
+	_instance = self
 
-func ready():
+func ready() -> void:
 	options_changed.emit(options)
 	placement_mode_changed.emit(placement_mode)
 
-	
 
-func select_placement_mode(mode: PlacementMode):
-	self.placement_mode = mode
 
-func select_parent(node: NodePath):
-	self._parent = node
+func select_placement_mode(mode: PlacementMode) -> void:
+	placement_mode = mode
+
+func select_parent(node: NodePath) -> void:
+	_parent = node
 	parent_changed.emit(node)
 
-func toggle_transformation_mode(mode: TransformMode):
+func toggle_transformation_mode(mode: TransformMode) -> void:
 	if transform_mode == mode:
 		transform_mode = TransformMode.None
 	else:
 		transform_mode = mode
 	transform_mode_changed.emit(transform_mode)
 	_select_default_axis(transform_mode)
-	
-func clear_parent():
-	self._parent = NodePath("")
-	parent_changed.emit(_parent)	
-	
-func set_unform_scaling(value: bool):
+
+func clear_parent() -> void:
+	_parent = NodePath("")
+	parent_changed.emit(_parent)
+
+func set_unform_scaling(value: bool) -> void:
 	options.uniform_scaling = value
 	if value:
 		options.min_scale = uniformV3(options.min_scale.x)
 		options.max_scale = uniformV3(options.max_scale.x)
-	options_changed.emit(options)	
+	options_changed.emit(options)
 
-func set_grid_snap_value(value: float):
+func set_grid_snap_value(value: float) -> void:
 	options.snapping_grid_step = value
 	options_changed.emit(options)
 
-func toggle_axis(axis: Vector3):
-	var new := (preview_transform_axis - axis).abs()
+func toggle_axis(axis: Vector3) -> void:
+	var new: Vector3 = (preview_transform_axis - axis).abs()
 	select_axis(new)
 
-func select_axis(axis: Vector3):	
+func select_axis(axis: Vector3) -> void:
 	preview_transform_axis = axis
 	preview_transform_axis_changed.emit(preview_transform_axis)
 
-func _select_default_axis(mode: TransformMode):
+func _select_default_axis(mode: TransformMode) -> void:
 	match mode:
 		TransformMode.Rotate:
 			select_axis(Vector3.UP)
@@ -94,39 +94,39 @@ func _select_default_axis(mode: TransformMode):
 
 func uniformV3(value: float) -> Vector3:
 	return Vector3(value, value, value)
- 	
-func set_grid_snapping_enabled(value: bool):
+
+func set_grid_snapping_enabled(value: bool) -> void:
 	options.snapping_enabled = value
 	options_changed.emit(options)
-	
-func set_min_rotation(vector: Vector3):
+
+func set_min_rotation(vector: Vector3) -> void:
 	options.min_rotation = vector
 	options_changed.emit(options)
 
-func set_max_scale(vector: Vector3):
+func set_max_scale(vector: Vector3) -> void:
 	options.max_scale = vector
 	options_changed.emit(options)
 
-func set_min_scale(vector: Vector3):
+func set_min_scale(vector: Vector3) -> void:
 	options.min_scale = vector
 	options_changed.emit(options)
 
 
-func set_max_rotation(vector: Vector3):
+func set_max_rotation(vector: Vector3) -> void:
 	options.max_rotation = vector
 	options_changed.emit(options)
 
-func cancel():
+func cancel() -> void:
 	if transform_mode != TransformMode.None:
 		toggle_transformation_mode(TransformMode.None)
 	else:
 		clear_selection()
-	
-func clear_selection():
-	_selected_asset = null
-	asset_deselected.emit()	
 
-func select_asset(asset: AssetResource):
+func clear_selection() -> void:
+	_selected_asset = null
+	asset_deselected.emit()
+
+func select_asset(asset: AssetResource) -> void:
 	if asset == _selected_asset:
 		_selected_asset = null
 		asset_deselected.emit()

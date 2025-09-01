@@ -9,32 +9,32 @@ class_name Chip
 
 var asset_collection: AssetCollection
 
-func _ready():
+func _ready() -> void:
 	add_theme_font_size_override("font_size", 22)
 	add_theme_color_override("font_color", Color.BLACK)
 	_update_stylebox()
 	_update_minimum_size()
 
-func set_background_color(color: Color):
+func set_background_color(color: Color) -> void:
 	backgroundColor = color
 	_update_stylebox()
 
-func set_corner_radius(radius: int):
+func set_corner_radius(radius: int) -> void:
 	corner_radius = radius
 	_update_stylebox()
 
-func set_content_margin_v(margin):
+func set_content_margin_v(margin: int) -> void:
 	content_margin_vertical = margin
 	_update_stylebox()
 	_update_minimum_size()
 
-func set_content_margin_h(margin):
+func set_content_margin_h(margin: int) -> void:
 	content_margin_horizontal = margin
 	_update_stylebox()
 	_update_minimum_size()
 
-func _update_stylebox():
-	var stylebox = StyleBoxFlat.new()
+func _update_stylebox() -> void:
+	var stylebox: StyleBoxFlat = StyleBoxFlat.new()
 	stylebox.bg_color = backgroundColor
 	stylebox.set_corner_radius_all(corner_radius)
 	stylebox.content_margin_left = content_margin_horizontal
@@ -43,5 +43,5 @@ func _update_stylebox():
 	stylebox.content_margin_top = content_margin_vertical
 	add_theme_stylebox_override("normal", stylebox)
 
-func _update_minimum_size():
+func _update_minimum_size() -> void:
 	custom_minimum_size = Vector2(content_margin_horizontal * 2, content_margin_vertical * 2) + get_minimum_size()

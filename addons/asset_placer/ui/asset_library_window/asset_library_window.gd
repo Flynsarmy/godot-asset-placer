@@ -2,30 +2,30 @@
 extends Control
 class_name AssetLibraryWindow
 
-@onready var presenter = AssetLibraryPresenter.new()
-@onready var folder_presenter = FolderPresenter.new()
+@onready var presenter: AssetLibraryPresenter = AssetLibraryPresenter.new()
+@onready var folder_presenter: FolderPresenter = FolderPresenter.new()
 
 @onready var placer_presenter := AssetPlacerPresenter._instance
 @onready var grid_container: Container = %GridContainer
-@onready var preview_resource = preload("res://addons/asset_placer/ui/components/asset_resource_preview.tscn")
+@onready var preview_resource: PackedScene = preload("res://addons/asset_placer/ui/components/asset_resource_preview.tscn")
 @onready var add_folder_button: Button = %AddFolderButton
 @onready var search_field: LineEdit = %SearchField
 @onready var filter_button: Button = %FilterButton
 @onready var filters_label: Label = %FiltersLabel
 @onready var reload_button: Button = %ReloadButton
-@onready var progress_bar = %ProgressBar
-@onready var empty_content = %EmptyContent
-@onready var main_content = %MainContent
-@onready var empty_collection_content = %EmptyCollectionContent
+@onready var progress_bar: ProgressBar = %ProgressBar
+@onready var empty_content: CenterContainer = %EmptyContent
+@onready var main_content: HSplitContainer = %MainContent
+@onready var empty_collection_content: CenterContainer = %EmptyCollectionContent
 @onready var empty_collection_view_add_folder_btn: Button = %EmptyCollectionViewAddFolderBtn
-@onready var scroll_container = %ScrollContainer
-@onready var empty_search_content = %EmptySearchContent
-@onready var empty_view_add_folder_btn = %EmptyViewAddFolderBtn
+@onready var scroll_container: ScrollContainer = %ScrollContainer
+@onready var empty_search_content: CenterContainer = %EmptySearchContent
+@onready var empty_view_add_folder_btn: Button = %EmptyViewAddFolderBtn
 
 signal asset_selected(asset: AssetResource)
 
 
-func _ready():
+func _ready() -> void:
 	presenter.assets_loaded.connect(show_assets)
 	presenter.show_filter_info.connect(show_filter_info)
 	presenter.show_sync_active.connect(show_sync_in_progress)
@@ -43,8 +43,8 @@ func _ready():
 		CollectionPicker.show_in(filter_button, presenter._active_collections, presenter.toggle_collection_filter)
 	)
 
-	
-func show_assets(assets: Array[AssetResource]):
+
+func show_assets(assets: Array[AssetResource]) -> void:
 	empty_collection_content.hide()
 	scroll_container.show()
 	for child in grid_container.get_children():
@@ -59,9 +59,9 @@ func show_assets(assets: Array[AssetResource]):
 		grid_container.add_child(child)
 		child.set_asset(asset)
 
-func show_asset_menu(asset: AssetResource, control: Control):
-	var options_menu := PopupMenu.new()
-	var mouse_pos = DisplayServer.mouse_get_position()
+func show_asset_menu(asset: AssetResource, control: Control) -> void:
+	var options_menu: PopupMenu = PopupMenu.new()
+	var mouse_pos: Vector2i = DisplayServer.mouse_get_position()
 	options_menu.add_icon_item(EditorIconTexture2D.new("Groups"), "Manage collections")
 	options_menu.add_icon_item(EditorIconTexture2D.new("File"), "Open")
 	options_menu.add_icon_item(EditorIconTexture2D.new("Remove"), "Remove")
@@ -70,10 +70,10 @@ func show_asset_menu(asset: AssetResource, control: Control):
 			0: CollectionPicker.show_in(control, asset.shallow_collections, func(collection, add):
 				presenter.toggle_asset_collection(asset, collection, add)
 			)
-			1: 
+			1:
 				EditorInterface.open_scene_from_path(asset.scene.resource_path)
 				EditorInterface.set_main_screen_editor("3D")
-			2: 
+			2:
 				if placer_presenter._selected_asset == asset:
 					placer_presenter.clear_selection()
 				presenter.delete_asset(asset)
@@ -81,46 +81,46 @@ func show_asset_menu(asset: AssetResource, control: Control):
 	)
 	EditorInterface.popup_dialog(options_menu, Rect2(mouse_pos, options_menu.get_contents_minimum_size()))
 
-func show_folder_dialog():
-	var folder_dialog = EditorFileDialog.new()
+func show_folder_dialog() -> void:
+	var folder_dialog: EditorFileDialog = EditorFileDialog.new()
 	folder_dialog.file_mode = EditorFileDialog.FILE_MODE_OPEN_DIR
 	folder_dialog.access = EditorFileDialog.ACCESS_RESOURCES
 	folder_dialog.dir_selected.connect(presenter.add_asset_folder)
 	EditorInterface.popup_dialog_centered(folder_dialog)
 
 
-func clear_selected_asset():
+func clear_selected_asset() -> void:
 	for child in grid_container.get_children():
 		if child is Button:
 			child.set_pressed_no_signal(false)
-			
-func _can_drop_data(at_position, data):
+
+func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 	if data is Dictionary:
 		var type = data["type"]
 		var files_or_dirs = type == "files_and_dirs" || type == "files"
 		return files_or_dirs and data.has("files")
-	return false	
-	
-func _drop_data(at_position, data):
+	return false
+
+func _drop_data(at_position: Vector2, data: Variant) -> void:
 	var dirs: PackedStringArray = data["files"]
 	presenter.add_assets_or_folders(dirs)
 
-func show_filter_info(size: int):
+func show_filter_info(size: int) -> void:
 	if size == 0:
 		filters_label.hide()
 	else:
 		filters_label.show()
-		filters_label.text = str(size)	
+		filters_label.text = str(size)
 
-func set_selected_asset(asset: AssetResource):
+func set_selected_asset(asset: AssetResource) -> void:
 	for child in grid_container.get_children():
 		if child is Button:
 			child.set_pressed_no_signal(child.get_meta("id") == asset.id)
 
 
 
-	
-func show_empty_view(type: AssetLibraryPresenter.EmptyType):
+
+func show_empty_view(type: AssetLibraryPresenter.EmptyType) -> void:
 	match type:
 		AssetLibraryPresenter.EmptyType.Search:
 			show_empty_search_content()
@@ -131,33 +131,33 @@ func show_empty_view(type: AssetLibraryPresenter.EmptyType):
 		AssetLibraryPresenter.EmptyType.None:
 			show_main_content()
 
-func show_main_content():
+func show_main_content() -> void:
 	main_content.show()
 	empty_content.hide()
 	scroll_container.show()
 	empty_collection_content.hide()
 	empty_search_content.hide()
-	
-func show_onboarding():
+
+func show_onboarding() -> void:
 	main_content.hide()
-	empty_collection_content.hide()	
+	empty_collection_content.hide()
 	empty_search_content.hide()
 	empty_content.show()
-			
-func show_empty_collection_view():
+
+func show_empty_collection_view() -> void:
 	main_content.show()
 	scroll_container.hide()
 	empty_collection_content.hide()
 	empty_collection_content.show()
 	empty_content.hide()
-	
-func show_empty_search_content():
+
+func show_empty_search_content() -> void:
 	main_content.show()
 	scroll_container.hide()
-	empty_collection_content.hide()	
-	empty_search_content.show()			
+	empty_collection_content.hide()
+	empty_search_content.show()
 
-func show_sync_in_progress(active: bool):
+func show_sync_in_progress(active: bool) -> void:
 	if active:
 		reload_button.hide()
 		progress_bar.show()

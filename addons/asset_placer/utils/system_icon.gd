@@ -6,14 +6,14 @@ class_name EditorIconTexture2D
 
 var _resolved_icon: Texture2D = null;
 
-func _init(name: String =  &"Node2D"):
-	self.icon_name = name
+func _init(name: String =  &"Node2D") -> void:
+	icon_name = name
 
-func _resolve():
+func _resolve() -> void:
 	if not Engine.is_editor_hint():
 		return # Don’t try resolving outside editor
 
-	var theme := EditorInterface.get_editor_theme()
+	var theme: Theme = EditorInterface.get_editor_theme()
 	if theme and icon_name != "":
 		_resolved_icon = theme.get_icon(icon_name, "EditorIcons")
 

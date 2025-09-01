@@ -20,7 +20,7 @@ const ISSUE_TEMPLATE = "https://github.com/levinzonr/godot-asset-placer/issues/n
 var updater: PluginUpdater = PluginUpdater.instance
 
 func _ready():
-	
+
 	updater.show_update_loading.connect(func(show):
 		if show:
 			update_and_restart_btn.disabled = true
@@ -36,8 +36,8 @@ func _ready():
 		changelog_link_button.uri = "https://github.com/levinzonr/godot-asset-placer/blob/main/CHANGELOG.md#" +  update.version.changelog_version()
 	)
 	updater.updater_up_to_date.connect(update_button.hide)
-	
-	
+
+
 	updater.check_for_updates()
 	update_button.pressed.connect(update_popup.popup)
 	update_and_restart_btn.pressed.connect(updater.do_update)

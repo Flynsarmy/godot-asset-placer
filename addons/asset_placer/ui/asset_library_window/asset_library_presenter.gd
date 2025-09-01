@@ -20,14 +20,14 @@ signal show_filter_info(size: int)
 signal show_sync_active(bool)
 signal show_empty_view(type: EmptyType)
 
-func _init():
-	self.folder_repository = FolderRepository.instance
-	self.assets_repository = AssetsRepository.instance
-	self.synchronizer = Synchronize.instance
-	
-	
+func _init() -> void:
+	folder_repository = FolderRepository.instance
+	assets_repository = AssetsRepository.instance
+	synchronizer = Synchronize.instance
 
-func on_ready():
+
+
+func on_ready() -> void:
 	_current_assets = assets_repository.get_all_assets()
 	show_filter_info.emit(0)
 	assets_repository.assets_changed.connect(_filter_by_collections_and_query)
@@ -36,63 +36,63 @@ func on_ready():
 		show_sync_active.emit(v)
 	)
 
-func add_asset_folder(path: String):
+func add_asset_folder(path: String) -> void:
 	folder_repository.add(path)
-	var dir_access = DirAccess.open(path)
+	var dir_access: DirAccess = DirAccess.open(path)
 	for file in dir_access.get_files():
 		add_asset(path + file, path)
 
-func on_query_change(query: String):
+func on_query_change(query: String) -> void:
 	self._current_query = query
 	_filter_by_collections_and_query()
 
-func add_asset(path: String, folder_path: String):
+func add_asset(path: String, folder_path: String) -> void:
 	var tags: Array[String] = []
 	for collection in _active_collections:
 		tags.push_back(collection.name)
-		
-	var id = ResourceIdCompat.path_to_uid(path)
+
+	var id: Variant = ResourceIdCompat.path_to_uid(path)
 	if !id:
 		push_error("Error getting id from path %s" % path)
 		return
-		
-	var existing = assets_repository.find_by_uid(id)
+
+	var existing: AssetResource = assets_repository.find_by_uid(id)
 	if existing:
 		var new_tags: Array[String] = []
 		for tag in tags:
 			if tag not in existing.tags:
 				new_tags.push_back(tag)
-				
+
 		existing.tags.append_array(new_tags)
 		assets_repository.update(existing)
 	else:
 		assets_repository.add_asset(path, tags, folder_path)
-	
 
-func delete_asset(asset: AssetResource):
+
+func delete_asset(asset: AssetResource) -> void:
 	assets_repository.delete(asset.id)
 	_filter_by_collections_and_query()
 
-func add_assets_or_folders(files: PackedStringArray):
+func add_assets_or_folders(files: PackedStringArray) -> void:
 	for file in files:
 		if file.get_extension().is_empty():
 			add_asset_folder(file)
 		else:
 			add_asset(file, "")
-		
+
 		_filter_by_collections_and_query()
 
-func toggle_asset_collection(asset: AssetResource, collection: AssetCollection, add: bool):
+func toggle_asset_collection(asset: AssetResource, collection: AssetCollection, add: bool) -> void:
 	if add:
 		asset.tags.append(collection.name)
 		assets_repository.update(asset)
 	else:
 		asset.tags.erase(collection.name)
 		assets_repository.update(asset)
-	
+
 	_filter_by_collections_and_query()
 
-func toggle_collection_filter(collection: AssetCollection, enabled: bool):
+func toggle_collection_filter(collection: AssetCollection, enabled: bool) -> void:
 	if enabled:
 		_active_collections.push_back(collection)
 	else:
@@ -101,20 +101,20 @@ func toggle_collection_filter(collection: AssetCollection, enabled: bool):
 		)
 	show_filter_info.emit(_active_collections.size())
 	_filter_by_collections_and_query()
-	
 
 
-func _filter_by_collections_and_query():
-	var all = assets_repository.get_all_assets()
+
+func _filter_by_collections_and_query() -> void:
+	var all: Array[AssetResource] = assets_repository.get_all_assets()
 	var filtered: Array[AssetResource] = []
-	
+
 	for asset in all:
-		var matches_query = asset.name.containsn(_current_query) || _current_query.is_empty()
-		var belongs_to_collection = asset.belongs_to_some_collection(_active_collections) || _active_collections.is_empty()
-		
+		var matches_query: bool = asset.name.containsn(_current_query) || _current_query.is_empty()
+		var belongs_to_collection: bool = asset.belongs_to_some_collection(_active_collections) || _active_collections.is_empty()
+
 		if matches_query and belongs_to_collection:
 			filtered.push_back(asset)
-	
+
 	if filtered.is_empty():
 		if _active_collections.is_empty() && _current_query.is_empty():
 			show_empty_view.emit(EmptyType.All)
@@ -127,8 +127,5 @@ func _filter_by_collections_and_query():
 		show_empty_view.emit(EmptyType.None)
 
 
-func sync():
+func sync() -> void:
 	synchronizer.sync_all()
-	
-				
-			
