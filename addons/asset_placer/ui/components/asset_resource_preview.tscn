@@ -25,7 +25,8 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 texture = ExtResource("2_55ohh")
-stretch_mode = 3
+expand_mode = 3
+stretch_mode = 5
 script = ExtResource("2_xdgah")
 metadata/_custom_type_script = "uid://dephufwlu765k"
 
