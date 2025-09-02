@@ -3,14 +3,17 @@ extends TextureRect
 class_name AssetThumbnail
 
 const no_preview_tex: CompressedTexture2D = preload("res://addons/asset_placer/ui/components/File.png")
+# How long between preview refreshes, in milliseconds.
+const REFRESH_TIME: int = 1000
 
 var resource: AssetResource
 var previewer: EditorResourcePreview
 var last_time_modified: int = 0
+var time_since_last_refresh: int = 0
 
 
 func set_resource(resource: AssetResource) -> void:
-	resource = resource
+	self.resource = resource
 	preview_resource(resource)
 
 func preview_resource(resource: AssetResource) -> void:
@@ -19,8 +22,13 @@ func preview_resource(resource: AssetResource) -> void:
 		previewer = EditorInterface.get_resource_previewer()
 		previewer.queue_edited_resource_preview(resource.scene, self, "_on_preview_generated", resource)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if Engine.is_editor_hint() and resource and resource.scene:
+		time_since_last_refresh += int(delta * 1000)
+		if time_since_last_refresh < REFRESH_TIME:
+			return
+		time_since_last_refresh = 0
+
 		var new_time_modified: int = FileAccess.get_modified_time(resource.scene.resource_path)
 		if new_time_modified != last_time_modified:
 			preview_resource(resource)
