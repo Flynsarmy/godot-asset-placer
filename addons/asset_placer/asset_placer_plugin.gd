@@ -8,7 +8,7 @@ var _presenter: AssetPlacerPresenter
 var  _asset_placer: AssetPlacer
 var _assets_repository: AssetsRepository
 var synchronizer: Synchronize
-var _updater: PluginUpdater
+#var _updater: PluginUpdater
 var _async: AssetPlacerAsync
 
 var _asset_placer_window: AssetLibraryPanel
@@ -29,7 +29,7 @@ func _disable_plugin() -> void:
 
 func _enter_tree() -> void:
 	_async = AssetPlacerAsync.new()
-	_updater = PluginUpdater.new(ADDON_PATH +  "/plugin.cfg", "")
+	#_updater = PluginUpdater.new(ADDON_PATH +  "/plugin.cfg", "")
 	_asset_placer = AssetPlacer.new(get_undo_redo())
 	_folder_repository = FolderRepository.new()
 	_assets_repository = AssetsRepository.new()

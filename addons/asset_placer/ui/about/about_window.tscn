@@ -46,7 +46,6 @@ initial_position = 1
 size = Vector2i(499, 213)
 
 [node name="MarginContainer" type="MarginContainer" parent="UpdatePopup"]
-anchors_preset = -1
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 495.0
@@ -123,7 +122,7 @@ text = "Asset Placer"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Version 1.0.0-alpha6"
+text = "Version 1.1.0-alpha2"
 
 [node name="UpdateButton" type="Button" parent="Panel/CenterContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -156,7 +155,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "GitHub"
-uri = "https://github.com/levinzonr/godot-asset-placer"
+uri = "https://github.com/Flynsarmy/godot-asset-placer"
 
 [node name="TextureRect" type="TextureRect" parent="Panel/CenterContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2

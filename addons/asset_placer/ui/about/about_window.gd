@@ -13,8 +13,8 @@ extends Control
 @onready var progress_bar: ProgressBar = $UpdatePopup/MarginContainer/Vbox/ProgressBar
 @onready var update_popup: Popup = $UpdatePopup
 
-const FEATURE_TEMPLATE = "https://github.com/levinzonr/godot-asset-placer/issues/new?template=feature_request.md&labels=enhancement&title=%5BFeature%5D%20"
-const ISSUE_TEMPLATE = "https://github.com/levinzonr/godot-asset-placer/issues/new?template=bug_report.md&labels=bug&title=%5BBUG%5D%20"
+const FEATURE_TEMPLATE = "https://github.com/Flynsarmy/godot-asset-placer/issues/new?template=feature_request.md&labels=enhancement&title=%5BFeature%5D%20"
+const ISSUE_TEMPLATE = "https://github.com/Flynsarmy/godot-asset-placer/issues/new?template=bug_report.md&labels=bug&title=%5BBUG%5D%20"
 
 
 var updater: PluginUpdater = PluginUpdater.instance
@@ -33,7 +33,7 @@ func _ready():
 		update_button.text = "Version %s Availalbe" % update.version
 		update_button.show()
 		update_version_label.text = update.version._to_string()
-		changelog_link_button.uri = "https://github.com/levinzonr/godot-asset-placer/blob/main/CHANGELOG.md#" +  update.version.changelog_version()
+		changelog_link_button.uri = "https://github.com/Flynsarmy/godot-asset-placer/blob/main/CHANGELOG.md#" +  update.version.changelog_version()
 	)
 	updater.updater_up_to_date.connect(update_button.hide)
 
