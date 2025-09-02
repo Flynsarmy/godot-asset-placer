@@ -38,6 +38,7 @@ func _enter_tree() -> void:
 	scene_changed.connect(_handle_scene_changed)
 	_presenter.asset_selected.connect(start_placement)
 	_presenter.asset_deselected.connect(_asset_placer.stop_placement)
+	_presenter.up()
 	_asset_placer_window = load("res://addons/asset_placer/ui/asset_library_panel.tscn").instantiate()
 	add_control_to_bottom_panel(_asset_placer_window, "Asset Placer")
 
@@ -61,6 +62,7 @@ func _exit_tree() -> void:
 	overlay.queue_free()
 	_plane_preview.queue_free()
 	_file_system.resources_reimported.disconnect(_react_to_reimorted_files)
+	_presenter.down()
 	_presenter.asset_selected.disconnect(start_placement)
 	_presenter.asset_deselected.disconnect(_asset_placer.stop_placement)
 	_asset_placer.stop_placement()

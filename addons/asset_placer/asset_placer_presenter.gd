@@ -17,6 +17,7 @@ var _selected_asset: AssetResource
 var options: AssetPlacerOptions
 var _parent: NodePath = NodePath("")
 var transform_mode: TransformMode = TransformMode.None
+var snap_settings: EditorSnapSettings
 
 var placement_mode: PlacementMode = PlacementMode.SurfacePlacement.new():
 	set(value):
@@ -35,6 +36,7 @@ enum TransformMode {
 
 func _init() -> void:
 	options = AssetPlacerOptions.new()
+	snap_settings = EditorSnapSettings.new()
 	_selected_asset = null
 	_instance = self
 
@@ -42,7 +44,11 @@ func ready() -> void:
 	options_changed.emit(options)
 	placement_mode_changed.emit(placement_mode)
 
+func up() -> void:
+	snap_settings.connect_settings()
 
+func down() -> void:
+	snap_settings.disconnect_settings()
 
 func select_placement_mode(mode: PlacementMode) -> void:
 	placement_mode = mode
@@ -70,10 +76,6 @@ func set_unform_scaling(value: bool) -> void:
 		options.max_scale = uniformV3(options.max_scale.x)
 	options_changed.emit(options)
 
-func set_grid_snap_value(value: float) -> void:
-	options.snapping_grid_step = value
-	options_changed.emit(options)
-
 func toggle_axis(axis: Vector3) -> void:
 	var new: Vector3 = (preview_transform_axis - axis).abs()
 	select_axis(new)
@@ -94,10 +96,6 @@ func _select_default_axis(mode: TransformMode) -> void:
 
 func uniformV3(value: float) -> Vector3:
 	return Vector3(value, value, value)
-
-func set_grid_snapping_enabled(value: bool) -> void:
-	options.snapping_enabled = value
-	options_changed.emit(options)
 
 func set_min_rotation(vector: Vector3) -> void:
 	options.min_rotation = vector

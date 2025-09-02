@@ -1,8 +1,6 @@
 @tool
 extends Control
 
-@onready var grid_snapping_checkbox: CheckBox = %GridSnappingCheckbox
-@onready var grid_snap_value_spin_box: SpinBox = %GridSnapValueSpinBox
 @onready var min_rotation_selector: SpinBoxVector3 = %MinRotationSelector
 @onready var max_rotation_selector: SpinBoxVector3 = %MaxRotationSelector
 
@@ -28,9 +26,6 @@ func _ready() -> void:
 			0: presenter.placement_mode = PlacementMode.SurfacePlacement.new()
 			1: presenter.placement_mode = PlacementMode.PlanePlacement.new()
 	)
-
-	grid_snapping_checkbox.toggled.connect(presenter.set_grid_snapping_enabled)
-	grid_snap_value_spin_box.value_changed.connect(presenter.set_grid_snap_value)
 
 	max_rotation_selector.value_changed.connect(presenter.set_max_rotation)
 	min_rotation_selector.value_changed.connect(presenter.set_min_rotation)
@@ -78,9 +73,6 @@ func show_parent(parent: NodePath) -> void:
 		parent_button.icon = EditorIconTexture2D.new("NodeWarning")
 
 func set_options(options: AssetPlacerOptions) -> void:
-	grid_snapping_checkbox.set_pressed_no_signal(options.snapping_enabled)
-	grid_snap_value_spin_box.editable = options.snapping_enabled
-	grid_snap_value_spin_box.set_value_no_signal(options.snapping_grid_step)
 	max_rotation_selector.set_value_no_signal(options.max_rotation)
 	min_rotation_selector.set_value_no_signal(options.min_rotation)
 	min_scale_selector.set_value_no_signal(options.min_scale)

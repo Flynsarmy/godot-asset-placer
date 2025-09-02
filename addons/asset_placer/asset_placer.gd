@@ -100,9 +100,9 @@ func get_collision_rids(node: Node) -> Array[RID]:
 	return rids
 
 func _snap_position(pos: Vector3) -> Vector3:
-	if !AssetPlacerPresenter._instance.options.snapping_enabled:
+	if !AssetPlacerPresenter._instance.snap_settings.snapping_enabled:
 		return pos
-	var grid_step: float = AssetPlacerPresenter._instance.options.snapping_grid_step
+	var grid_step: float = AssetPlacerPresenter._instance.snap_settings.translate_snap
 	return pos.snapped(Vector3(grid_step, grid_step, grid_step))
 
 func _place_instance(transform: Transform3D, select_after_placement: bool) -> void:
