@@ -70,7 +70,7 @@ func transform_preview(mode: AssetPlacerPresenter.TransformMode, axis: Vector3, 
 		AssetPlacerPresenter.TransformMode.None:
 			return false
 		AssetPlacerPresenter.TransformMode.Scale:
-			var factor: float = 1.0 + preview_transform_step * direction
+			var factor: float = 1.0 + preview_transform_step * -direction
 			var min_scale: float = 0.01
 			var new_scale: Vector3 = preview_node.scale
 			if axis.x != 0:
