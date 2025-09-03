@@ -16,8 +16,10 @@ func _ready() -> void:
 
 func set_asset(asset: AssetResource) -> void:
 	resource = asset
-	label.text = asset.name
+	label.text = asset.name.get_basename()
 	asset_thumbnail.set_resource(asset)
+
+	tooltip_text = resource._scene.resource_path
 
 
 func _gui_input(event: InputEvent) -> void:
