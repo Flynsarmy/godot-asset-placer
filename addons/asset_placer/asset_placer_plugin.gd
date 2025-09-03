@@ -124,7 +124,7 @@ func _forward_3d_gui_input(viewport_camera: Camera3D, event: InputEvent) -> int:
 			return EditorPlugin.AFTER_GUI_INPUT_STOP
 
 		if event.keycode == KEY_W:
-			_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.Move)
+			_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.None)
 			return EditorPlugin.AFTER_GUI_INPUT_STOP
 
 		if event.keycode == KEY_ESCAPE:

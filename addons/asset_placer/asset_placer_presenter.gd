@@ -30,8 +30,7 @@ var preview_transform_axis: Vector3 = Vector3.UP
 enum TransformMode {
 	None,
 	Rotate,
-	Scale,
-	Move
+	Scale
 }
 
 func _init() -> void:
@@ -90,8 +89,6 @@ func _select_default_axis(mode: TransformMode) -> void:
 			select_axis(Vector3.UP)
 		TransformMode.Scale:
 			select_axis(Vector3.ONE)
-		TransformMode.Move:
-			select_axis(Vector3.BACK)
 		_: pass
 
 func uniformV3(value: float) -> Vector3:

@@ -84,10 +84,6 @@ func transform_preview(mode: AssetPlacerPresenter.TransformMode, axis: Vector3, 
 		AssetPlacerPresenter.TransformMode.Rotate:
 			preview_node.rotate(axis.normalized() * direction, preview_transform_step)
 			return true
-
-		AssetPlacerPresenter.TransformMode.Move:
-			preview_node.translate(axis.normalized() * direction * preview_transform_step)
-			return true
 		_:
 			return false
 
