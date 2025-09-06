@@ -21,4 +21,3 @@ func get_placement_point(camera: Camera3D, mouse_position: Vector2) -> AssetPlac
 		if last_collision_hit:
 			return last_collision_hit
 		return AssetPlacementStrategy.CollisionHit.zero()
-
