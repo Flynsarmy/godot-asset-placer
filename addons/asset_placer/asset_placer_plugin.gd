@@ -115,16 +115,15 @@ func _forward_3d_gui_input(viewport_camera: Camera3D, event: InputEvent) -> int:
 				return EditorPlugin.AFTER_GUI_INPUT_PASS
 
 	if event is InputEventKey and event.is_pressed():
+		# Disable default move/scale/rotate keybinds
 		if event.keycode == KEY_E:
-			_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.Rotate)
+			#_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.Rotate)
 			return EditorPlugin.AFTER_GUI_INPUT_STOP
-
 		if event.keycode == KEY_R:
-			_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.Scale)
+			#_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.Scale)
 			return EditorPlugin.AFTER_GUI_INPUT_STOP
-
 		if event.keycode == KEY_W:
-			_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.None)
+			#_presenter.toggle_transformation_mode(AssetPlacerPresenter.TransformMode.None)
 			return EditorPlugin.AFTER_GUI_INPUT_STOP
 
 		if event.keycode == KEY_ESCAPE:

@@ -18,6 +18,7 @@ var options: AssetPlacerOptions
 var _parent: NodePath = NodePath("")
 var transform_mode: TransformMode = TransformMode.None
 var snap_settings: EditorSnapSettings
+var transformation_settings: EditorTransformationSettings
 
 var placement_mode: PlacementMode = PlacementMode.SurfacePlacement.new():
 	set(value):
@@ -36,6 +37,7 @@ enum TransformMode {
 func _init() -> void:
 	options = AssetPlacerOptions.new()
 	snap_settings = EditorSnapSettings.new()
+	transformation_settings = EditorTransformationSettings.new()
 	_selected_asset = null
 	_instance = self
 
@@ -45,9 +47,17 @@ func ready() -> void:
 
 func up() -> void:
 	snap_settings.connect_settings()
+	transformation_settings.connect_settings()
+
+	transformation_settings.mode_changed.connect(func (new_mode: TransformMode, _old_mode: TransformMode) -> void:
+		transform_mode = new_mode
+		transform_mode_changed.emit(transform_mode)
+		_select_default_axis(transform_mode)
+	)
 
 func down() -> void:
 	snap_settings.disconnect_settings()
+	transformation_settings.disconnect_settings()
 
 func select_placement_mode(mode: PlacementMode) -> void:
 	placement_mode = mode
@@ -112,10 +122,7 @@ func set_max_rotation(vector: Vector3) -> void:
 	options_changed.emit(options)
 
 func cancel() -> void:
-	if transform_mode != TransformMode.None:
-		toggle_transformation_mode(TransformMode.None)
-	else:
-		clear_selection()
+	clear_selection()
 
 func clear_selection() -> void:
 	_selected_asset = null
