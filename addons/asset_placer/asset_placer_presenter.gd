@@ -39,6 +39,7 @@ func _init() -> void:
 	snap_settings = EditorSnapSettings.new()
 	transformation_settings = EditorTransformationSettings.new()
 	_selected_asset = null
+	print("_instance is self ", self)
 	_instance = self
 
 func ready() -> void:

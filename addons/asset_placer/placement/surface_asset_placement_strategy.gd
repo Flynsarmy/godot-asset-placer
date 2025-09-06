@@ -2,6 +2,7 @@ extends AssetPlacementStrategy
 class_name SurfaceAssetPlacementStrategy
 
 var exclude_rids = []
+var last_collision_hit: AssetPlacementStrategy.CollisionHit = AssetPlacementStrategy.CollisionHit.zero()
 
 func _init(exclude_rids):
 	self.exclude_rids = exclude_rids
@@ -17,8 +18,11 @@ func get_placement_point(camera: Camera3D, mouse_position: Vector2) -> Collision
 	params.to = ray_origin + ray_dir * 1000
 	var result = space_state.intersect_ray(params)
 	if not result.has('position') or not result.has('normal'):
+		if last_collision_hit:
+			return last_collision_hit
 		return AssetPlacementStrategy.CollisionHit.zero()
 
 	var position: Vector3 = result.position
 	var normal: Vector3 = result.normal
-	return AssetPlacementStrategy.CollisionHit.new(position, normal)
+	last_collision_hit = AssetPlacementStrategy.CollisionHit.new(position, normal)
+	return last_collision_hit
