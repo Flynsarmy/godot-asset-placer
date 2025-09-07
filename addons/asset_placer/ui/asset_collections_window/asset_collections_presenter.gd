@@ -15,7 +15,7 @@ signal clear_text_field()
 func _init() -> void:
 	_repository = AssetCollectionRepository.new()
 	_repository.collections_changed.connect(_load_collections)
-	_assets_repository = AssetsRepository.instance
+	_assets_repository = AssetsRepository.instance()
 
 func ready() -> void:
 	_load_collections()

@@ -21,9 +21,9 @@ signal show_sync_active(bool)
 signal show_empty_view(type: EmptyType)
 
 func _init() -> void:
-	folder_repository = FolderRepository.instance
-	assets_repository = AssetsRepository.instance
-	synchronizer = Synchronize.instance
+	folder_repository = FolderRepository.instance()
+	assets_repository = AssetsRepository.instance()
+	synchronizer = Synchronize.instance(folder_repository, assets_repository)
 
 
 

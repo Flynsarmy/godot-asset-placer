@@ -3,10 +3,13 @@ class_name AssetPlacerAsync
 
 var _job_ids: Array[int] = []
 
-static var instance: AssetPlacerAsync
+static var _instance: AssetPlacerAsync
 
-func _init() -> void:
-	instance = self
+static func instance() -> AssetPlacerAsync:
+	if not _instance:
+		_instance = AssetPlacerAsync.new()
+
+	return _instance
 
 
 func enqueue(callable: Callable) -> void:

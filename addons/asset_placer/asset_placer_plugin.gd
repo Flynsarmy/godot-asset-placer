@@ -33,7 +33,7 @@ func _enter_tree() -> void:
 	_asset_placer = AssetPlacer.new(get_undo_redo())
 	_folder_repository = FolderRepository.new()
 	_assets_repository = AssetsRepository.new()
-	synchronizer = Synchronize.new(_folder_repository, _assets_repository)
+	synchronizer = Synchronize.instance(_folder_repository, _assets_repository)
 	_presenter = AssetPlacerPresenter.new()
 	scene_changed.connect(_handle_scene_changed)
 	_presenter.asset_selected.connect(start_placement)

@@ -8,9 +8,9 @@ var asset_repository: AssetsRepository
 var sync: Synchronize
 
 func _init() -> void:
-	folder_repository = FolderRepository.instance
-	asset_repository = AssetsRepository.instance
-	sync = Synchronize.new(folder_repository, asset_repository)
+	folder_repository = FolderRepository.instance()
+	asset_repository = AssetsRepository.instance()
+	sync = Synchronize.instance(folder_repository, asset_repository)
 
 
 func _ready() -> void:
