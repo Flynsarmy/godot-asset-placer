@@ -15,7 +15,10 @@ func get_placement_point(camera: Camera3D, mouse_position: Vector2) -> AssetPlac
 	var plane = Plane(plane_options.normal, plane_options.origin)
 	var intersection = plane.intersects_ray(ray_origin, ray_dir)
 	if intersection:
-		last_collision_hit = AssetPlacementStrategy.CollisionHit.new(intersection, plane.normal)
+		var final_normal: Vector3 = plane.normal
+		if ray_dir.dot(plane.normal) > 0:
+			final_normal = -plane.normal
+		last_collision_hit = AssetPlacementStrategy.CollisionHit.new(intersection, final_normal)
 		return last_collision_hit
 	else:
 		if last_collision_hit:
