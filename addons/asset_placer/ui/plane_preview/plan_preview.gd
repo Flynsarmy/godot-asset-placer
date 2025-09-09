@@ -4,9 +4,9 @@ extends Node3D
 @onready var mesh_instance: MeshInstance3D = $MeshInstance3D
 
 func _ready() -> void:
-	var mode: PlacementMode = AssetPlacerPresenter._instance.placement_mode
+	var mode: PlacementMode = AssetPlacerPresenter.instance().placement_mode
 	_react_placement_mode_change(mode)
-	AssetPlacerPresenter._instance.placement_mode_changed.connect(_react_placement_mode_change)
+	AssetPlacerPresenter.instance().placement_mode_changed.connect(_react_placement_mode_change)
 
 func _react_placement_mode_change(placement_mode: PlacementMode) -> void:
 	if placement_mode is PlacementMode.PlanePlacement:

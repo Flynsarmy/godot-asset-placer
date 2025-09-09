@@ -13,7 +13,7 @@ var presenter: AssetPlacerPresenter
 
 func _ready():
 	hide()
-	presenter = AssetPlacerPresenter._instance
+	presenter = AssetPlacerPresenter.instance()
 	presenter.transform_mode_changed.connect(set_mode)
 	presenter.preview_transform_axis_changed.connect(set_axis)
 	presenter.asset_selected.connect(func(a): show())

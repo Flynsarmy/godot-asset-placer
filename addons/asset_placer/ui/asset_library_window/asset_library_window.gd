@@ -5,7 +5,7 @@ class_name AssetLibraryWindow
 @onready var presenter: AssetLibraryPresenter = AssetLibraryPresenter.new()
 @onready var folder_presenter: FolderPresenter = FolderPresenter.new()
 
-@onready var placer_presenter := AssetPlacerPresenter._instance
+@onready var placer_presenter: AssetPlacerPresenter = AssetPlacerPresenter.instance()
 @onready var grid_container: Container = %GridContainer
 @onready var preview_resource: PackedScene = preload("res://addons/asset_placer/ui/components/asset_resource_preview.tscn")
 @onready var add_folder_button: Button = %AddFolderButton
@@ -29,8 +29,8 @@ func _ready() -> void:
 	presenter.assets_loaded.connect(show_assets)
 	presenter.show_filter_info.connect(show_filter_info)
 	presenter.show_sync_active.connect(show_sync_in_progress)
-	AssetPlacerPresenter._instance.asset_selected.connect(set_selected_asset)
-	AssetPlacerPresenter._instance.asset_deselected.connect(clear_selected_asset)
+	AssetPlacerPresenter.instance().asset_selected.connect(set_selected_asset)
+	AssetPlacerPresenter.instance().asset_deselected.connect(clear_selected_asset)
 	empty_collection_view_add_folder_btn.pressed.connect(show_folder_dialog)
 	empty_view_add_folder_btn.pressed.connect(show_folder_dialog)
 	presenter.show_empty_view.connect(show_empty_view)
@@ -51,7 +51,7 @@ func show_assets(assets: Array[AssetResource]) -> void:
 		child.queue_free()
 	for asset in assets:
 		var child: AssetResourcePreview = preview_resource.instantiate()
-		child.left_clicked.connect(AssetPlacerPresenter._instance.select_asset)
+		child.left_clicked.connect(placer_presenter.select_asset)
 		child.right_clicked.connect(func(asset):
 			show_asset_menu(asset, child)
 		)

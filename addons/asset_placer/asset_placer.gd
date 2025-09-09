@@ -29,7 +29,7 @@ func start_placement(root: Window, asset: AssetResource, placement: PlacementMod
 	_apply_preview_material(preview_node)
 	var scene: Node = EditorInterface.get_selection().get_selected_nodes()[0]
 	if scene is Node3D:
-		AssetTransformations.apply_transforms(preview_node, AssetPlacerPresenter._instance.options)
+		AssetTransformations.apply_transforms(preview_node, AssetPlacerPresenter.instance().options)
 		preview_aabb = AABBProvider.provide_aabb(preview_node)
 
 func _apply_preview_material(node: Node3D) -> void:
@@ -59,8 +59,8 @@ func move_preview(mouse_position: Vector2, camera: Camera3D) -> bool:
 		var adjust = snapped_pos - bottom_world
 		new_transform.origin += adjust
 		preview_node.global_transform = new_transform
-		
-		
+
+
 		return true
 	else:
 		return false
@@ -103,22 +103,22 @@ func get_collision_rids(node: Node) -> Array[RID]:
 	return rids
 
 func _snap_position(pos: Vector3) -> Vector3:
-	if !AssetPlacerPresenter._instance.snap_settings.snapping_enabled:
+	if !AssetPlacerPresenter.instance().snap_settings.snapping_enabled:
 		return pos
-	var grid_step: float = AssetPlacerPresenter._instance.snap_settings.translate_snap
+	var grid_step: float = AssetPlacerPresenter.instance().snap_settings.translate_snap
 	return pos.snapped(Vector3(grid_step, grid_step, grid_step))
 
 func _place_instance(transform: Transform3D, select_after_placement: bool) -> void:
 	var selection: EditorSelection = EditorInterface.get_selection()
 	var scene: Node = EditorInterface.get_edited_scene_root()
-	var scene_root: Node = scene.get_node(AssetPlacerPresenter._instance._parent)
+	var scene_root: Node = scene.get_node(AssetPlacerPresenter.instance()._parent)
 
 	if scene_root and asset.scene:
 		undo_redo.create_action("Place Asset: %s" % asset.name)
 		undo_redo.add_do_method(self, "_do_placement", scene_root, transform, select_after_placement)
 		undo_redo.add_undo_method(self, "_undo_placement", scene_root)
 		undo_redo.commit_action()
-		AssetTransformations.apply_transforms(preview_node, AssetPlacerPresenter._instance.options)
+		AssetTransformations.apply_transforms(preview_node, AssetPlacerPresenter.instance().options)
 
 func _do_placement(root: Node3D, transform: Transform3D, select_after_placement: bool) -> void:
 	var new_node: Node3D =  _instantiate_asset_resource(asset)
@@ -130,7 +130,7 @@ func _do_placement(root: Node3D, transform: Transform3D, select_after_placement:
 	new_node.owner = EditorInterface.get_edited_scene_root()
 	node_history.push_front(new_node.name)
 	if select_after_placement:
-		AssetPlacerPresenter._instance.clear_selection()
+		AssetPlacerPresenter.instance().clear_selection()
 		EditorInterface.edit_node(new_node)
 
 func _undo_placement(root: Node3D) -> void:

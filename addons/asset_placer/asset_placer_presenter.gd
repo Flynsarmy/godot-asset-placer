@@ -46,6 +46,12 @@ func _init() -> void:
 	_selected_asset = null
 	_instance = self
 
+static func instance() -> AssetPlacerPresenter:
+	if not _instance:
+		_instance = AssetPlacerPresenter.new()
+
+	return _instance
+
 func ready() -> void:
 	options_changed.emit(options)
 	placement_mode_changed.emit(placement_mode)

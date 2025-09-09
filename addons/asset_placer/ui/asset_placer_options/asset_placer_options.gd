@@ -17,7 +17,7 @@ extends Control
 var presenter: AssetPlacerPresenter
 
 func _ready() -> void:
-	presenter = AssetPlacerPresenter._instance
+	presenter = AssetPlacerPresenter.instance()
 	presenter.options_changed.connect(set_options)
 	presenter.parent_changed.connect(show_parent)
 
