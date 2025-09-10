@@ -12,8 +12,7 @@ signal transform_mode_changed(mode: TransformMode)
 signal placement_mode_changed(mode: PlacementMode)
 signal preview_transform_axis_changed(axis: Vector3)
 signal asset_selected(asset: AssetResource)
-signal error_shown()
-signal error_hidden()
+signal error_changed(new_value: String)
 
 var _selected_asset: AssetResource
 var options: AssetPlacerOptions
@@ -30,7 +29,11 @@ var placement_mode: PlacementMode = PlacementMode.SurfacePlacement.new():
 var preview_transform_axis: Vector3 = Vector3.UP
 
 var error_showing: bool = false
-var error_message: String = ""
+var error_message: String = "" :
+	set(new_value):
+		error_message = new_value
+		error_changed.emit(new_value)
+
 
 
 enum TransformMode {
@@ -69,20 +72,6 @@ func up() -> void:
 func down() -> void:
 	snap_settings.disconnect_settings()
 	transformation_settings.disconnect_settings()
-
-func show_error_message(message: String) -> void:
-	error_message = message
-	if error_showing:
-		return
-	error_showing = true
-	error_shown.emit()
-
-func hide_error_message() -> void:
-	if not error_showing:
-		return
-	error_message = ""
-	error_showing = false
-	error_hidden.emit()
 
 func select_placement_mode(mode: PlacementMode) -> void:
 	placement_mode = mode

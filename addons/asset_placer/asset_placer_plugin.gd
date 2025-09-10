@@ -52,6 +52,7 @@ func _enter_tree() -> void:
 
 	overlay =  _viewport_overlay_res.instantiate()
 	get_editor_interface().get_editor_viewport_3d().add_child(overlay)
+	_asset_placer.preview_moved.connect(overlay._on_preview_moved)
 
 	_file_system.resources_reimported.connect(_react_to_reimorted_files)
 	if !_file_system.is_scanning():
@@ -59,6 +60,7 @@ func _enter_tree() -> void:
 
 
 func _exit_tree() -> void:
+	_asset_placer.preview_moved.disconnect(overlay._on_preview_moved)
 	overlay.queue_free()
 	_plane_preview.queue_free()
 	_file_system.resources_reimported.disconnect(_react_to_reimorted_files)
@@ -91,6 +93,9 @@ func start_placement(asset: AssetResource) -> void:
 	_asset_placer.start_placement(get_tree().root, asset, _presenter.placement_mode)
 
 func _forward_3d_gui_input(viewport_camera: Camera3D, event: InputEvent) -> int:
+	if _asset_placer.preview_node:
+		overlay._forward_3d_gui_input(viewport_camera, event)
+
 	if event is InputEventMouseMotion:
 		if event.button_mask == 0:
 			if _asset_placer.move_preview(event.position, viewport_camera):

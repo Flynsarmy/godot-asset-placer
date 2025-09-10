@@ -26,6 +26,7 @@ icon_name = &"Error"
 metadata/_custom_type_script = "uid://dmicn3kmr620j"
 
 [node name="ViewportOverlay" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -162,32 +163,54 @@ text = "Placement Mode"
 layout_mode = 2
 text = "Q: Cycle Placement Mode"
 
-[node name="ErrorContainer" type="MarginContainer" parent="."]
+[node name="MouseContainer" type="MarginContainer" parent="."]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_top = -20.0
-offset_right = 40.0
-offset_bottom = 20.0
+offset_left = -201.0
+offset_top = 11.0
+offset_right = 199.0
+offset_bottom = 139.0
+grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+pivot_offset = Vector2(200, 0)
+mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ErrorContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MouseContainer"]
 layout_mode = 2
-theme_override_constants/separation = 12
+mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="ErrorContainer/HBoxContainer"]
+[node name="PositionLabel" type="Label" parent="MouseContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "(0.000, 0.000, 0.000)"
+horizontal_alignment = 1
+
+[node name="InstructionsLabel" type="Label" parent="MouseContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Click to place
+Alt+Click to place and exit
+E to Rotate, R to Scale
+Alt+E/R to reset"
+horizontal_alignment = 1
+
+[node name="ErrorContainer" type="HBoxContainer" parent="MouseContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="MouseContainer/VBoxContainer/ErrorContainer"]
 layout_mode = 2
 texture = SubResource("Texture2D_bu8qk")
 stretch_mode = 3
 
-[node name="ErrorLabel" type="Label" parent="ErrorContainer/HBoxContainer"]
+[node name="ErrorLabel" type="Label" parent="MouseContainer/VBoxContainer/ErrorContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "No Surface to Collide With"
+horizontal_alignment = 1

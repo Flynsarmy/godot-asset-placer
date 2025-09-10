@@ -1,6 +1,8 @@
 extends RefCounted
 class_name AssetPlacer
 
+signal preview_moved(preview_node: Node3D)
+
 var preview_node: Node3D
 var preview_aabb: AABB
 var node_history: Array[String] = []
@@ -60,7 +62,7 @@ func move_preview(mouse_position: Vector2, camera: Camera3D) -> bool:
 		new_transform.origin += adjust
 		preview_node.global_transform = new_transform
 
-
+		preview_moved.emit(preview_node)
 		return true
 	else:
 		return false
