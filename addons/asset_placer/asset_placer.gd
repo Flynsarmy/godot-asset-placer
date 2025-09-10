@@ -77,19 +77,20 @@ func transform_preview(mode: AssetPlacerPresenter.TransformMode, axis: Vector3, 
 		AssetPlacerPresenter.TransformMode.None:
 			return false
 		AssetPlacerPresenter.TransformMode.Scale:
-			var factor: float = 1.0 + preview_transform_step * -direction
-			var min_scale: float = 0.01
-			var new_scale: Vector3 = preview_node.scale
-			if axis.x != 0:
-				new_scale.x = max(preview_node.scale.x * factor, min_scale)
-			if axis.y != 0:
-				new_scale.y = max(preview_node.scale.y * factor, min_scale)
-			if axis.z != 0:
-				new_scale.z = max(preview_node.scale.z * factor, min_scale)
-			preview_node.scale = new_scale
+			var snap_settings: EditorSnapSettings = AssetPlacerPresenter.instance().snap_settings
+			var scale_amount: float = 0.1
+			if snap_settings.snapping_enabled:
+				scale_amount = snap_settings.scale_snap / 100.0
+
+			preview_node.scale += axis * scale_amount * -direction
+			preview_node.scale = preview_node.scale.max(Vector3(0.1, 0.1, 0.1))
 			return true
 		AssetPlacerPresenter.TransformMode.Rotate:
-			preview_node.rotate(axis.normalized() * direction, preview_transform_step)
+			var snap_settings: EditorSnapSettings = AssetPlacerPresenter.instance().snap_settings
+			var rotate_rads: float = deg_to_rad(5)
+			if snap_settings.snapping_enabled:
+				rotate_rads = deg_to_rad(snap_settings.rotate_snap)
+			preview_node.rotate(axis.normalized() * direction, rotate_rads)
 			return true
 		_:
 			return false

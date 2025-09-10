@@ -107,12 +107,15 @@ func _forward_3d_gui_input(viewport_camera: Camera3D, event: InputEvent) -> int:
 				#print(0)
 				#EditorPlugin.AFTER_GUI_INPUT_PASS
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN or event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			var direction: int = -1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1
-			var axis: Vector3 = _presenter.preview_transform_axis
-			if _asset_placer.transform_preview(_presenter.transform_mode, axis, direction):
+			if _presenter.transform_mode in [AssetPlacerPresenter.TransformMode.Rotate, AssetPlacerPresenter.TransformMode.Scale]:
+				if event.pressed:
+					var direction: int = -1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1
+					var axis: Vector3 = _presenter.preview_transform_axis
+					_asset_placer.transform_preview(_presenter.transform_mode, axis, direction)
+
 				return EditorPlugin.AFTER_GUI_INPUT_STOP
-			else:
-				return EditorPlugin.AFTER_GUI_INPUT_PASS
+
+			return EditorPlugin.AFTER_GUI_INPUT_PASS
 
 	if event is InputEventKey and event.is_pressed():
 		# Disable default move/scale/rotate keybinds
