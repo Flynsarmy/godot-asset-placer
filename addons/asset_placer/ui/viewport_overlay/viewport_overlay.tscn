@@ -26,7 +26,6 @@ icon_name = &"Error"
 metadata/_custom_type_script = "uid://dmicn3kmr620j"
 
 [node name="ViewportOverlay" type="Control"]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,6 +62,7 @@ alignment = 1
 [node name="RotateCheckButton" type="CheckBox" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+button_pressed = true
 text = "E: Rotate"
 icon = SubResource("Texture2D_h3uaa")
 
@@ -188,15 +188,6 @@ mouse_filter = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "(0.000, 0.000, 0.000)"
-horizontal_alignment = 1
-
-[node name="InstructionsLabel" type="Label" parent="MouseContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-text = "Click to place
-Alt+Click to place and exit
-E to Rotate, R to Scale
-Alt+E/R to reset"
 horizontal_alignment = 1
 
 [node name="ErrorContainer" type="HBoxContainer" parent="MouseContainer/VBoxContainer"]

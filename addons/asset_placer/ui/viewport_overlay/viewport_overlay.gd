@@ -56,4 +56,4 @@ func set_axis(vector: Vector3) -> void:
 func _on_preview_transformed(preview_node: Node3D) -> void:
 	var prev_scale: float = preview_node.scale.x
 	var pos: Vector3 = preview_node.global_position
-	position_label.text = "%.1fs (%.3f, %.3f, %.3f)" % [prev_scale, pos.x, pos.y, pos.z]
+	position_label.text = "(%.3f, %.3f, %.3f) %.1fs" % [pos.x, pos.y, pos.z, prev_scale]
