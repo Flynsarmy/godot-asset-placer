@@ -28,7 +28,7 @@ func start_placement(root: Window, asset: AssetResource, placement: PlacementMod
 	root.add_child(preview_node)
 	preview_rids = get_collision_rids(preview_node)
 	set_placement_mode(placement)
-	_apply_preview_material(preview_node)
+	#_apply_preview_material(preview_node)
 	var scene: Node = EditorInterface.get_selection().get_selected_nodes()[0]
 	if scene is Node3D:
 		AssetTransformations.apply_transforms(preview_node, AssetPlacerPresenter.instance().options)
