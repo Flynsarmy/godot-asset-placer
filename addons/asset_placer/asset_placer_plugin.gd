@@ -52,7 +52,7 @@ func _enter_tree() -> void:
 
 	overlay =  _viewport_overlay_res.instantiate()
 	get_editor_interface().get_editor_viewport_3d().add_child(overlay)
-	_asset_placer.preview_moved.connect(overlay._on_preview_moved)
+	_asset_placer.preview_transformed.connect(overlay._on_preview_transformed)
 
 	_file_system.resources_reimported.connect(_react_to_reimorted_files)
 	if !_file_system.is_scanning():
@@ -60,7 +60,7 @@ func _enter_tree() -> void:
 
 
 func _exit_tree() -> void:
-	_asset_placer.preview_moved.disconnect(overlay._on_preview_moved)
+	_asset_placer.preview_transformed.disconnect(overlay._on_preview_transformed)
 	overlay.queue_free()
 	_plane_preview.queue_free()
 	_file_system.resources_reimported.disconnect(_react_to_reimorted_files)

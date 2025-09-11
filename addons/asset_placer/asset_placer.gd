@@ -1,7 +1,7 @@
 extends RefCounted
 class_name AssetPlacer
 
-signal preview_moved(preview_node: Node3D)
+signal preview_transformed(preview_node: Node3D)
 
 var preview_node: Node3D
 var preview_aabb: AABB
@@ -62,7 +62,7 @@ func move_preview(mouse_position: Vector2, camera: Camera3D) -> bool:
 		new_transform.origin += adjust
 		preview_node.global_transform = new_transform
 
-		preview_moved.emit(preview_node)
+		preview_transformed.emit(preview_node)
 		return true
 	else:
 		return false
@@ -86,6 +86,7 @@ func transform_preview(mode: AssetPlacerPresenter.TransformMode, axis: Vector3, 
 
 			preview_node.scale += axis * scale_amount * -direction
 			preview_node.scale = preview_node.scale.max(Vector3(0.1, 0.1, 0.1))
+			preview_transformed.emit(preview_node)
 			return true
 		AssetPlacerPresenter.TransformMode.Rotate:
 			var snap_settings: EditorSnapSettings = AssetPlacerPresenter.instance().snap_settings
@@ -93,6 +94,7 @@ func transform_preview(mode: AssetPlacerPresenter.TransformMode, axis: Vector3, 
 			if snap_settings.snapping_enabled:
 				rotate_rads = deg_to_rad(snap_settings.rotate_snap)
 			preview_node.rotate(axis.normalized() * direction, rotate_rads)
+			preview_transformed.emit(preview_node)
 			return true
 		_:
 			return false
