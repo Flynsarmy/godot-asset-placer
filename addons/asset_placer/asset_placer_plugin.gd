@@ -106,14 +106,18 @@ func _forward_3d_gui_input(viewport_camera: Camera3D, event: InputEvent) -> int:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			return _asset_placer.place_asset(Input.is_key_pressed(KEY_SHIFT))
-				#print(1)
-				#return EditorPlugin.AFTER_GUI_INPUT_STOP
-			#else:
-				#print(0)
-				#EditorPlugin.AFTER_GUI_INPUT_PASS
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN or event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			if _presenter.transform_mode in [AssetPlacerPresenter.TransformMode.Rotate, AssetPlacerPresenter.TransformMode.Scale]:
-				if event.pressed:
+			# Next/prev asset
+			if event.is_pressed() and event.ctrl_pressed:
+				if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+					_asset_placer_window.asset_library_window.set_next_asset()
+				else:
+					_asset_placer_window.asset_library_window.set_prev_asset()
+				_asset_placer.move_preview(event.position, viewport_camera)
+				return EditorPlugin.AFTER_GUI_INPUT_STOP
+			# Scale/Rotate preview
+			elif _presenter.transform_mode in [AssetPlacerPresenter.TransformMode.Rotate, AssetPlacerPresenter.TransformMode.Scale]:
+				if event.is_pressed():
 					var direction: int = -1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1
 					var axis: Vector3 = _presenter.preview_transform_axis
 					_asset_placer.transform_preview(_presenter.transform_mode, axis, direction)

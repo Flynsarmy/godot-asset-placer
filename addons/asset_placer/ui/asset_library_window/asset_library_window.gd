@@ -117,7 +117,27 @@ func set_selected_asset(asset: AssetResource) -> void:
 		if child is Button:
 			child.set_pressed_no_signal(child.get_meta("id") == asset.id)
 
+func set_next_asset() -> void:
+	var child_count: int = grid_container.get_child_count()
+	var selected: int = grid_container.get_children().find_custom(
+		func (child: AssetResourcePreview): return child.button_pressed
+	)
+	# If the last asset is selected we want to wrap around to the first asset
+	if selected == grid_container.get_child_count() - 1:
+		selected = -1
 
+	grid_container.get_child(selected + 1).button_pressed = true
+
+func set_prev_asset() -> void:
+	var child_count: int = grid_container.get_child_count()
+	var selected: int = grid_container.get_children().find_custom(
+		func (child: AssetResourcePreview): return child.button_pressed
+	)
+	# If the first or no asset is selected we want to wrap around to the last asset
+	if selected < 1:
+		selected = child_count
+
+	grid_container.get_child(selected - 1).button_pressed = true
 
 
 func show_empty_view(type: AssetLibraryPresenter.EmptyType) -> void:
