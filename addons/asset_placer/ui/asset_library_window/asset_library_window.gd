@@ -2,8 +2,7 @@
 extends Control
 class_name AssetLibraryWindow
 
-@onready var presenter: AssetLibraryPresenter = AssetLibraryPresenter.new()
-@onready var folder_presenter: FolderPresenter = FolderPresenter.new()
+signal asset_selected(asset: AssetResource)
 
 @onready var placer_presenter: AssetPlacerPresenter = AssetPlacerPresenter.instance()
 @onready var grid_container: Container = %GridContainer
@@ -22,10 +21,19 @@ class_name AssetLibraryWindow
 @onready var empty_search_content: CenterContainer = %EmptySearchContent
 @onready var empty_view_add_folder_btn: Button = %EmptyViewAddFolderBtn
 
-signal asset_selected(asset: AssetResource)
+static var is_first_load: bool = true
 
+var presenter: AssetLibraryPresenter
+var folder_presenter: FolderPresenter
 
 func _ready() -> void:
+	# Needed until https://github.com/godotengine/godot/issues/110480 is fixed
+	if self.is_first_load:
+		self.is_first_load = false
+	else:
+		return
+
+	presenter = AssetLibraryPresenter.new()
 	presenter.assets_loaded.connect(show_assets)
 	presenter.show_filter_info.connect(show_filter_info)
 	presenter.show_sync_active.connect(show_sync_in_progress)
@@ -42,6 +50,8 @@ func _ready() -> void:
 	filter_button.pressed.connect(func ():
 		CollectionPicker.show_in(filter_button, presenter._active_collections, presenter.toggle_collection_filter)
 	)
+
+	folder_presenter = FolderPresenter.new()
 
 
 func show_assets(assets: Array[AssetResource]) -> void:

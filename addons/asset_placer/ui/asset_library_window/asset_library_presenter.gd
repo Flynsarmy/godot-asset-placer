@@ -71,7 +71,6 @@ func add_asset(path: String, folder_path: String) -> void:
 
 func delete_asset(asset: AssetResource) -> void:
 	assets_repository.delete(asset.id)
-	_filter_by_collections_and_query()
 
 func add_assets_or_folders(files: PackedStringArray) -> void:
 	for file in files:
@@ -79,8 +78,6 @@ func add_assets_or_folders(files: PackedStringArray) -> void:
 			add_asset_folder(file)
 		else:
 			add_asset(file, "")
-
-		_filter_by_collections_and_query()
 
 func toggle_asset_collection(asset: AssetResource, collection: AssetCollection, add: bool) -> void:
 	if add:
