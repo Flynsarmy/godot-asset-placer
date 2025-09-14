@@ -46,4 +46,5 @@ text_overrun_behavior = 5
 
 [node name="RenameField" type="LineEdit" parent="MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2

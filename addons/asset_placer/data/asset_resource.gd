@@ -6,6 +6,9 @@ var name: String
 var id: String
 var tags: Array[String]
 var folder_path: String
+var random_rotation_min: Vector3 = Vector3.ZERO
+var random_rotation_max: Vector3 = Vector3.ZERO
+var random_scale: Vector2 = Vector2.ONE
 var _scene: Resource = null
 
 
