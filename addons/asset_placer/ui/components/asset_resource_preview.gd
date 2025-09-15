@@ -23,7 +23,7 @@ func _ready() -> void:
 
 func set_asset(asset: AssetResource) -> void:
 	resource = asset
-	label.text = asset.name.get_basename()
+	label.text = asset.name
 	asset_thumbnail.set_resource(asset)
 
 	tooltip_text = resource._scene.resource_path

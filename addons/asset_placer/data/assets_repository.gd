@@ -54,7 +54,7 @@ func add_asset(scene_path: String, tags: Array[String] = [], folder_path: String
 	var id = ResourceIdCompat.path_to_uid(scene_path)
 	if exists(id):
 		return false
-	var asset = AssetResource.new(id, scene_path.get_file(), tags, folder_path)
+	var asset = AssetResource.new(id, scene_path.get_file().get_basename(), tags, folder_path)
 	var duplicated_items = library.items.duplicate()
 	duplicated_items.append(asset)
 	library.items = duplicated_items
