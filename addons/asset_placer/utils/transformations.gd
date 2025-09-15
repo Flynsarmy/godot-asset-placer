@@ -17,19 +17,7 @@ static func transform_rotation(transform: Transform3D, options: AssetPlacerOptio
 
 
 static func transform_scale(transform: Transform3D, options: AssetPlacerOptions) -> Transform3D:
-	if options.uniform_scaling:
-		var scale: float = randf_range(options.min_scale.x, options.max_scale.x)
-		var basiz: Basis = transform.basis.orthonormalized().scaled(Vector3(scale, scale, scale))
-		transform.basis = basiz
-		return transform
-	else:
-		var scale_x: float = randf_range(options.min_scale.x, options.max_scale.x)
-		var scale_y: float = randf_range(options.min_scale.y, options.max_scale.y)
-		var scale_z: float = randf_range(options.min_scale.z, options.max_scale.z)
-		var basiz: Basis = transform.basis.orthonormalized().scaled(Vector3(scale_x, scale_y, scale_z))
-		transform.basis = basiz
-		return transform
-
-static func make_uniform(v: Vector3) -> Vector3:
-	var avg: float = (v.x + v.y + v.z) / 3.0
-	return Vector3(avg, avg, avg)
+	var scale: float = randf_range(options.min_scale, options.max_scale)
+	var basiz: Basis = transform.basis.orthonormalized().scaled(Vector3(scale, scale, scale))
+	transform.basis = basiz
+	return transform

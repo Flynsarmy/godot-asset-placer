@@ -62,28 +62,34 @@ func show_assets(assets: Array[AssetResource]) -> void:
 	for asset in assets:
 		var child: AssetResourcePreview = preview_resource.instantiate()
 		child.left_clicked.connect(placer_presenter.select_asset)
-		child.right_clicked.connect(func(asset):
+		child.right_clicked.connect(func(asset: AssetResource):
 			show_asset_menu(asset, child)
+		)
+		child.asset_changed.connect(func (asset: AssetResource):
+			presenter.assets_repository.update(asset)
 		)
 		child.set_meta("id", asset.id)
 		grid_container.add_child(child)
 		child.set_asset(asset)
 
-func show_asset_menu(asset: AssetResource, control: Control) -> void:
+func show_asset_menu(asset: AssetResource, control: AssetResourcePreview) -> void:
 	var options_menu: PopupMenu = PopupMenu.new()
 	var mouse_pos: Vector2i = DisplayServer.mouse_get_position()
 	options_menu.add_icon_item(EditorIconTexture2D.new("Groups"), "Manage collections")
+	options_menu.add_icon_item(EditorIconTexture2D.new("Rename"), "Rename")
 	options_menu.add_icon_item(EditorIconTexture2D.new("File"), "Open")
 	options_menu.add_icon_item(EditorIconTexture2D.new("Remove"), "Remove")
 	options_menu.index_pressed.connect(func(index):
-		match index:
-			0: CollectionPicker.show_in(control, asset.shallow_collections, func(collection, add):
+		match options_menu.get_item_text(index):
+			'Manage collections': CollectionPicker.show_in(control, asset.shallow_collections, func(collection, add):
 				presenter.toggle_asset_collection(asset, collection, add)
 			)
-			1:
+			'Rename':
+				control.start_rename()
+			'Open':
 				EditorInterface.open_scene_from_path(asset.scene.resource_path)
 				EditorInterface.set_main_screen_editor("3D")
-			2:
+			'Remove':
 				if placer_presenter._selected_asset == asset:
 					placer_presenter.clear_selection()
 				presenter.delete_asset(asset)

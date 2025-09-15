@@ -43,3 +43,7 @@ text = "Asset"
 horizontal_alignment = 1
 autowrap_mode = 1
 text_overrun_behavior = 5
+
+[node name="RenameField" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2

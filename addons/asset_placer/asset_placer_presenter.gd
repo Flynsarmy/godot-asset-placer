@@ -92,13 +92,6 @@ func clear_parent() -> void:
 	_parent = NodePath("")
 	parent_changed.emit(_parent)
 
-func set_unform_scaling(value: bool) -> void:
-	options.uniform_scaling = value
-	if value:
-		options.min_scale = uniformV3(options.min_scale.x)
-		options.max_scale = uniformV3(options.max_scale.x)
-	options_changed.emit(options)
-
 func toggle_axis(axis: Vector3) -> void:
 	var new: Vector3 = (preview_transform_axis - axis).abs()
 	select_axis(new)
@@ -122,12 +115,12 @@ func set_min_rotation(vector: Vector3) -> void:
 	options.min_rotation = vector
 	options_changed.emit(options)
 
-func set_max_scale(vector: Vector3) -> void:
-	options.max_scale = vector
+func set_max_scale(value: float) -> void:
+	options.max_scale = value
 	options_changed.emit(options)
 
-func set_min_scale(vector: Vector3) -> void:
-	options.min_scale = vector
+func set_min_scale(value: float) -> void:
+	options.min_scale = value
 	options_changed.emit(options)
 
 

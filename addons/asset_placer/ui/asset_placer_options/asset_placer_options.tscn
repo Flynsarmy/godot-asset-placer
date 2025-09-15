@@ -208,38 +208,30 @@ stretch_mode = 3
 layout_mode = 2
 text = "Randomize Scale"
 
-[node name="UniformScaleCheckBox" type="CheckBox" parent="MarginContainer/ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-button_pressed = true
-text = "Unform Scaling"
-
 [node name="GridContainer2" type="GridContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer"]
 layout_mode = 2
-columns = 2
+columns = 4
 
 [node name="Label" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer/GridContainer2"]
 layout_mode = 2
 text = "Min"
 
-[node name="MinScaleSelector" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer/GridContainer2"]
+[node name="MinScale" type="SpinBox" parent="MarginContainer/ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer/GridContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
-script = ExtResource("2_k4pj7")
-min = Vector3(-100, -100, -100)
-max = Vector3(100, 100, 100)
-uniform = true
-metadata/_custom_type_script = "uid://btqju8qjrlawq"
+size_flags_horizontal = 3
+min_value = 0.01
+step = 0.1
+value = 1.01
 
 [node name="Label2" type="Label" parent="MarginContainer/ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer/GridContainer2"]
 layout_mode = 2
 text = "Max"
 
-[node name="MaxScaleSelector" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer/GridContainer2"]
+[node name="MaxScale" type="SpinBox" parent="MarginContainer/ScrollContainer/VBoxContainer/FoldableContainer/VBoxContainer/GridContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
-script = ExtResource("2_k4pj7")
-min = Vector3(-100, -100, -100)
-max = Vector3(100, 100, 100)
-uniform = true
-metadata/_custom_type_script = "uid://btqju8qjrlawq"
+size_flags_horizontal = 3
+min_value = 0.01
+step = 0.1
+value = 1.01

@@ -108,12 +108,13 @@ func _forward_3d_gui_input(viewport_camera: Camera3D, event: InputEvent) -> int:
 			return _asset_placer.place_asset(Input.is_key_pressed(KEY_SHIFT))
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN or event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			# Next/prev asset
-			if event.is_pressed() and event.ctrl_pressed:
-				if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-					_asset_placer_window.asset_library_window.set_next_asset()
-				else:
-					_asset_placer_window.asset_library_window.set_prev_asset()
-				_asset_placer.move_preview(event.position, viewport_camera)
+			if event.ctrl_pressed:
+				if event.is_pressed():
+					if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+						_asset_placer_window.asset_library_window.set_next_asset()
+					else:
+						_asset_placer_window.asset_library_window.set_prev_asset()
+					_asset_placer.move_preview(event.position, viewport_camera)
 				return EditorPlugin.AFTER_GUI_INPUT_STOP
 			# Scale/Rotate preview
 			elif _presenter.transform_mode in [AssetPlacerPresenter.TransformMode.Rotate, AssetPlacerPresenter.TransformMode.Scale]:

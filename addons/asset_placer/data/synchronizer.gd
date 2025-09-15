@@ -118,4 +118,3 @@ func _clear_data():
 	_removed = 0
 	_added = 0
 	_scanned = 0
-
