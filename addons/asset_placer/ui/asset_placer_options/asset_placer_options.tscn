@@ -113,7 +113,6 @@ popup/item_1/id = 1
 
 [node name="PlaneOriginContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/MarginContainer/VBoxContainer/PlacementMode/VBoxContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/MarginContainer/VBoxContainer/PlacementMode/VBoxContainer/PlaneOriginContainer"]
@@ -130,7 +129,6 @@ metadata/_custom_type_script = "uid://btqju8qjrlawq"
 
 [node name="PlaneAxisContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/MarginContainer/VBoxContainer/PlacementMode/VBoxContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/MarginContainer/VBoxContainer/PlacementMode/VBoxContainer/PlaneAxisContainer"]

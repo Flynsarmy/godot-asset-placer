@@ -20,7 +20,6 @@ signal asset_selected(asset: AssetResource)
 static var is_first_load: bool = true
 
 var presenter: AssetLibraryPresenter
-var folder_presenter: FolderPresenter
 
 func _ready() -> void:
 	# Needed until https://github.com/godotengine/godot/issues/110480 is fixed
@@ -64,8 +63,6 @@ func _ready() -> void:
 		var position: Vector2i = DisplayServer.mouse_get_position()
 		EditorInterface.popup_dialog(picker, Rect2(position, size))
 	)
-
-	folder_presenter = FolderPresenter.new()
 
 
 func show_assets(assets: Array[AssetResource]) -> void:

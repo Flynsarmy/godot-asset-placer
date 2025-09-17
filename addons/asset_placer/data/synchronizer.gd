@@ -1,7 +1,6 @@
 extends RefCounted
 class_name Synchronize
 
-var folder_repository: FolderRepository
 var asset_repository: AssetsRepository
 
 static var _instance: Synchronize
@@ -18,13 +17,12 @@ var sync_running = false:
 		sync_running = value
 		call_deferred("emit_signal", "sync_state_change", value)
 
-func _init(folders_repository: FolderRepository, assets_repository: AssetsRepository):
+func _init(assets_repository: AssetsRepository):
 	self.asset_repository = assets_repository
-	self.folder_repository = folders_repository
 
-static func instance(folders_repository: FolderRepository, assets_repository: AssetsRepository) -> Synchronize:
+static func instance(assets_repository: AssetsRepository) -> Synchronize:
 	if not _instance:
-		_instance = Synchronize.new(folders_repository, assets_repository)
+		_instance = Synchronize.new(assets_repository)
 	return _instance
 
 func sync_all():
@@ -40,30 +38,8 @@ func sync_all():
 		sync_running = false
 	)
 
-func sync_folder(folder: AssetFolder):
-
-	if sync_running:
-		push_error("Sync is already running")
-		return
-
-	AssetPlacerAsync.instance().enqueue(func():
-		sync_running = true
-		_sync_folder(folder)
-		_notify_scan_complete()
-		sync_running = false
-	)
-
-
-func _sync_folder(folder: AssetFolder):
-	_clear_invalid_assets()
-	_clear_unreachable_assets()
-	add_assets_from_folder(folder.path, folder.include_subfolders)
-
 func _sync_all():
-	_clear_unreachable_assets()
 	_clear_invalid_assets()
-	for folder in folder_repository.get_all():
-		_sync_folder(folder)
 
 func add_assets_from_folder(folder_path: String, recursive: bool):
 	var dir = DirAccess.open(folder_path)
@@ -83,30 +59,6 @@ func _notify_scan_complete():
 	if _added != 0 || _removed != 0:
 		call_deferred("emit_signal", "sync_complete", _added, _removed, _scanned)
 	_clear_data()
-
-
-func _clear_unreachable_assets():
-	for asset in asset_repository.get_all_assets():
-		var path = asset.folder_path
-		if not path.is_empty():
-			var folder = folder_repository.find(path)
-			if folder == null:
-				# remove asset if folder associated with that asset no longer exists
-				asset_repository.delete(asset.id)
-			elif not _is_asset_reachable_from_folder(asset, folder):
-				asset_repository.delete(asset.id)
-
-func _is_asset_reachable_from_folder(asset: AssetResource, folder: AssetFolder) -> bool:
-	var asset_folder_path := asset.folder_path
-	var folder_path := folder.path
-	if folder_path == asset_folder_path:
-		return true
-
-	if folder.include_subfolders and asset_folder_path.begins_with(folder_path + "/"):
-		return true
-
-	return false
-
 
 func _clear_invalid_assets():
 	for asset in asset_repository.get_all_assets():

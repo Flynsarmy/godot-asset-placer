@@ -3,7 +3,6 @@ extends EditorPlugin
 
 const ADDON_PATH: String = "res://addons/asset_placer"
 
-var _folder_repository: FolderRepository
 var _presenter: AssetPlacerPresenter
 var  _asset_placer: AssetPlacer
 var _assets_repository: AssetsRepository
@@ -31,13 +30,13 @@ func _enter_tree() -> void:
 	_async = AssetPlacerAsync.new()
 	#_updater = PluginUpdater.new(ADDON_PATH +  "/plugin.cfg", "")
 	_asset_placer = AssetPlacer.new(get_undo_redo())
-	_folder_repository = FolderRepository.new()
 	_assets_repository = AssetsRepository.new()
-	synchronizer = Synchronize.instance(_folder_repository, _assets_repository)
+	synchronizer = Synchronize.instance(_assets_repository)
 	_presenter = AssetPlacerPresenter.new()
 	scene_changed.connect(_handle_scene_changed)
 	_presenter.asset_selected.connect(start_placement)
 	_presenter.asset_deselected.connect(_asset_placer.stop_placement)
+	_presenter.placement_mode_changed.connect(_asset_placer.set_placement_mode)
 	_presenter.up()
 	_asset_placer_window = load("res://addons/asset_placer/ui/asset_library_panel.tscn").instantiate()
 	add_control_to_bottom_panel(_asset_placer_window, "Asset Placer")

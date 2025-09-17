@@ -2,7 +2,6 @@ extends RefCounted
 class_name AssetLibraryPresenter
 
 var library: AssetLibrary
-var folder_repository: FolderRepository
 var assets_repository: AssetsRepository
 var synchronizer: Synchronize
 
@@ -21,9 +20,8 @@ signal show_sync_active(bool)
 signal show_empty_view(type: EmptyType)
 
 func _init() -> void:
-	folder_repository = FolderRepository.instance()
 	assets_repository = AssetsRepository.instance()
-	synchronizer = Synchronize.instance(folder_repository, assets_repository)
+	synchronizer = Synchronize.instance(assets_repository)
 
 
 
@@ -37,7 +35,6 @@ func on_ready() -> void:
 	)
 
 func add_asset_folder(path: String) -> void:
-	folder_repository.add(path)
 	var dir_access: DirAccess = DirAccess.open(path)
 	for file in dir_access.get_files():
 		add_asset(path + file, path)

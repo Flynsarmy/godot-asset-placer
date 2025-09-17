@@ -6,22 +6,14 @@ var _asset_lib_json := "user://asset_library.json"
 func get_library() -> AssetLibrary:
 	var file = FileAccess.open(_asset_lib_json, FileAccess.READ)
 	if file == null || file.get_as_text().is_empty():
-		return AssetLibrary.new([], [], [])
+		return AssetLibrary.new([], [])
 	else:
 		var data = JSON.parse_string(file.get_as_text())
-		var folders_dicts: Array = data["folders"]
 		var assets_dicts: Array = data["assets"]
 		var collections_dict: Array = data["collections"]
 
-		var folders: Array[AssetFolder]
 		var assets: Array[AssetResource]
 		var collections: Array[AssetCollection]
-
-		for folder_dict in folders_dicts:
-			var path = folder_dict["path"]
-			var include_subfolders = folder_dict["include_subfolders"]
-			var folder = AssetFolder.new(path, include_subfolders)
-			folders.append(folder)
 
 		for asset_dict in assets_dicts:
 			var name = asset_dict["name"]
@@ -45,20 +37,13 @@ func get_library() -> AssetLibrary:
 			collections.append(AssetCollection.new(name, color))
 
 		file.close()
-		return AssetLibrary.new(assets, folders, collections)
+		return AssetLibrary.new(assets, collections)
 
 
 func save_libray(library: AssetLibrary):
 	if library:
 		var assets_dict : Array[Dictionary] = []
-		var folders_dict: Array[Dictionary] = []
 		var collections_dict: Array[Dictionary] = []
-
-		for folder in library.folders:
-			folders_dict.append({
-				"path": folder.path,
-				"include_subfolders": folder.include_subfolders
-			})
 
 		for asset in library.items:
 			assets_dict.append({
@@ -76,7 +61,6 @@ func save_libray(library: AssetLibrary):
 
 		var lib_dict = {
 			"assets": assets_dict,
-			"folders": folders_dict,
 			"collections": collections_dict
 		}
 

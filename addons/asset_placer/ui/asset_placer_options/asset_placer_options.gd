@@ -22,9 +22,9 @@ func _ready() -> void:
 	presenter.parent_changed.connect(show_parent)
 
 	placement_mode_options_button.item_selected.connect(func(id):
-		match id:
-			0: presenter.placement_mode = PlacementMode.SurfacePlacement.new()
-			1: presenter.placement_mode = PlacementMode.PlanePlacement.new()
+		match placement_mode_options_button.get_item_text(id):
+			"Surface Collisions": presenter.placement_mode = PlacementMode.SurfacePlacement.new()
+			"Plane Collision": presenter.placement_mode = PlacementMode.PlanePlacement.new()
 	)
 
 	max_rotation_selector.value_changed.connect(presenter.set_max_rotation)
