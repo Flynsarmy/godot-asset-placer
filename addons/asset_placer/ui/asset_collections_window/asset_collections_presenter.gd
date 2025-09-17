@@ -52,6 +52,11 @@ func get_collection_assets(collection: AssetCollection) -> Array[AssetResource]:
 		return asset.belongs_to_collection(collection)
 	)
 
+func collection_name_exists(name: String) -> bool:
+	return _repository.get_collections().any(func (collection: AssetCollection):
+		return collection.name == name
+	)
+
 func delete_collection(collection: AssetCollection) -> void:
 	_repository.delete_collection(collection.name)
 	for asset in _assets_repository.get_all_assets():
