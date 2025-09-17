@@ -10,28 +10,24 @@ script = ExtResource("2_jdl0x")
 icon_name = &"Add"
 metadata/_custom_type_script = "uid://dmicn3kmr620j"
 
-[node name="AssetCollectionWindow" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="AssetCollectionWindow" type="AcceptDialog"]
+oversampling_override = 1.0
+title = "Manage Collections"
+initial_position = 2
+size = Vector2i(600, 500)
+visible = true
+min_size = Vector2i(600, 500)
+max_size = Vector2i(32768, 1000)
 script = ExtResource("1_g1b7h")
 
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 1
+[node name="MarginContainer" type="MarginContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 16
@@ -39,28 +35,29 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Panel/MarginContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 32
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer2"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="NameTextField" type="LineEdit" parent="Panel/MarginContainer/VBoxContainer2/HBoxContainer"]
+[node name="NameTextField" type="LineEdit" parent="MarginContainer/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 placeholder_text = "New Collection Name"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="Panel/MarginContainer/VBoxContainer2/HBoxContainer"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="MarginContainer/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Color"
 color = Color(0.6156863, 0, 0, 1)
 edit_intensity = false
 
-[node name="AddButton" type="Button" parent="Panel/MarginContainer/VBoxContainer2/HBoxContainer"]
+[node name="AddButton" type="Button" parent="MarginContainer/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Godot"
@@ -69,6 +66,30 @@ text = "Add"
 icon = SubResource("Texture2D_x040h")
 icon_alignment = 2
 
-[node name="ChipsContainer" type="HFlowContainer" parent="Panel/MarginContainer/VBoxContainer2"]
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer2/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer2/Panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="CollectionsList" type="VBoxContainer" parent="MarginContainer/VBoxContainer2/Panel/ScrollContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

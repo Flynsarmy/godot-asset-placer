@@ -44,6 +44,13 @@ func _load_collections() -> void:
 	var collections: Array[AssetCollection] = _repository.get_collections()
 	show_collections.emit(collections)
 
+func update_collection(old_name: String, new_collection: AssetCollection) -> void:
+	_repository.update_collection(old_name, new_collection)
+
+func get_collection_assets(collection: AssetCollection) -> Array[AssetResource]:
+	return _assets_repository.get_all_assets().filter(func (asset: AssetResource):
+		return asset.belongs_to_collection(collection)
+	)
 
 func delete_collection(collection: AssetCollection) -> void:
 	_repository.delete_collection(collection.name)

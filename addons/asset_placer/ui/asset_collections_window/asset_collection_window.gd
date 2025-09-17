@@ -1,61 +1,48 @@
 @tool
-extends Control
+extends Window
+
+const COLLECTION_ROW: PackedScene = preload("uid://7q08js5mtpmm")
 
 
-@onready var chips_container: Container = %ChipsContainer
 @onready var presenter: AssetCollectionsPresenter = AssetCollectionsPresenter.new()
 @onready var name_text_field: LineEdit = %NameTextField
 @onready var color_picker_button: ColorPickerButton= %ColorPickerButton
 @onready var add_button: Button = %AddButton
+@onready var collections_list: VBoxContainer = %CollectionsList
 
 
 func _ready() -> void:
 	presenter.enable_create_button.connect(func(enabled):
 		add_button.disabled = !enabled
+		show_collections(presenter._repository.get_collections())
 	)
 	presenter.set_color(color_picker_button.color)
 	presenter.clear_text_field.connect(name_text_field.clear)
-	presenter.show_collections.connect(show_collections)
+	#presenter.show_collections.connect(show_collections)
 	presenter.ready()
+	show_collections(presenter._repository.get_collections())
 
 	add_button.pressed.connect(presenter.create_collection)
 	name_text_field.text_changed.connect(presenter.set_name)
 	color_picker_button.color_changed.connect(presenter.set_color)
 
+func _notification(what : int) -> void:
+	if (what == NOTIFICATION_WM_CLOSE_REQUEST):
+		queue_free()
 
 func show_collections(items: Array[AssetCollection]) -> void:
-	for child in chips_container.get_children():
+	for child in collections_list.get_children():
 		child.queue_free()
 
 	for item in items:
-		var chip: Button = Button.new()
-		chip.text = item.name
-		chip.icon = make_circle_icon(16, item.backgroundColor)
-		chips_container.add_child(chip)
-		chip.pressed.connect(func(): _show_options_dialog(item))
-
-
-func _show_options_dialog(collection: AssetCollection) -> void:
-	var dialog: PopupMenu = PopupMenu.new()
-	var mouse_pos: Vector2 = EditorInterface.get_base_control().get_global_mouse_position()
-	dialog.add_icon_item(EditorIconTexture2D.new("Remove"), "Delete")
-	dialog.index_pressed.connect(func(i):
-		presenter.delete_collection(collection)
-	)
-	EditorInterface.popup_dialog(dialog, Rect2i(mouse_pos, dialog.get_contents_minimum_size()))
-
-func make_circle_icon(radius: int, color: Color) -> Texture2D:
-	var size: int = radius * 2
-	var img: Image = Image.create(size, size, false, Image.FORMAT_RGBA8)
-	img.fill(Color(0, 0, 0, 0))  # Transparent background
-
-	for y in size:
-		for x in size:
-			var dist: float = Vector2(x, y).distance_to(Vector2(radius, radius))
-			if dist <= radius:
-				img.set_pixel(x, y, color)
-
-	img.generate_mipmaps()
-
-	var tex: ImageTexture = ImageTexture.create_from_image(img)
-	return tex
+		var collection_row: HBoxContainer = COLLECTION_ROW.instantiate()
+		collections_list.add_child(collection_row)
+		collection_row.collection = item
+		collection_row.remove_button.pressed.connect(func ():
+			presenter.delete_collection(item)
+			show_collections(presenter._repository.get_collections())
+		)
+		collection_row.collection_changed.connect(func (old_name: String, collection: AssetCollection):
+			presenter.update_collection(old_name, collection)
+		)
+		collection_row.set_asset_count(presenter.get_collection_assets(item).size())

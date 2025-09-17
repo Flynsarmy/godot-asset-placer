@@ -4,8 +4,7 @@ class_name CollectionPicker
 
 signal collection_selected(collection: AssetCollection, selected: bool)
 
-@onready var presenter: AssetCollectionsPresenter = AssetCollectionsPresenter.new()
-
+var presenter: AssetCollectionsPresenter = AssetCollectionsPresenter.new()
 var pre_selected: Array[AssetCollection] = []
 
 func _ready() -> void:
@@ -30,10 +29,11 @@ func show_collections(collections: Array[AssetCollection]) -> void:
 
 	index_pressed.connect(func(index):
 		toggle_item_checked(index)
-		collection_selected.emit(collections[index], is_item_checked(index))
+		if index < collections.size():
+			collection_selected.emit(collections[index], is_item_checked(index))
 	)
 
-func make_circle_icon(radius: int, color: Color) -> Texture2D:
+static func make_circle_icon(radius: int, color: Color) -> Texture2D:
 	var size: int = radius * 2
 	var img: Image = Image.create(size, size, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0, 0, 0, 0))  # Transparent background
@@ -48,11 +48,3 @@ func make_circle_icon(radius: int, color: Color) -> Texture2D:
 
 	var tex: ImageTexture = ImageTexture.create_from_image(img)
 	return tex
-
-static func show_in(context: Control, selected: Array[AssetCollection], on_select: Callable) -> void:
-	var picker: CollectionPicker = CollectionPicker.new()
-	picker.collection_selected.connect(on_select)
-	picker.pre_selected = selected
-	var size: Vector2 = picker.get_contents_minimum_size()
-	var position: Vector2i = DisplayServer.mouse_get_position()
-	EditorInterface.popup_dialog(picker, Rect2(position, size))

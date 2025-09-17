@@ -1,0 +1,78 @@
+[gd_scene load_steps=8 format=3 uid="uid://7q08js5mtpmm"]
+
+[ext_resource type="Script" uid="uid://bsaxlgwsy60ca" path="res://addons/asset_placer/ui/asset_collections_window/collection_row.gd" id="1_56kk8"]
+[ext_resource type="Script" uid="uid://dmicn3kmr620j" path="res://addons/asset_placer/utils/system_icon.gd" id="1_bl38t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vjkuh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_56kk8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6o83t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7r2v0"]
+
+[sub_resource type="Texture2D" id="Texture2D_casgi"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("1_bl38t")
+icon_name = &"Close"
+metadata/_custom_type_script = "uid://dmicn3kmr620j"
+
+[node name="CollectionRow" type="HBoxContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 40.0
+grow_horizontal = 2
+script = ExtResource("1_56kk8")
+
+[node name="ColorButton" type="ColorPickerButton" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+tooltip_text = "Set collection color"
+text = "Color"
+edit_intensity = false
+
+[node name="RenameField" type="LineEdit" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LabelButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"FlatButton"
+
+[node name="Label" type="Label" parent="LabelButton"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+text = "Collection name here"
+vertical_alignment = 1
+
+[node name="AssetCountLabel" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_vjkuh")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_56kk8")
+theme_override_styles/background = SubResource("StyleBoxEmpty_6o83t")
+theme_override_styles/fill = SubResource("StyleBoxEmpty_7r2v0")
+bbcode_enabled = true
+text = "[i]23 assets[/i]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="RemoveButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Remove collection"
+icon = SubResource("Texture2D_casgi")
